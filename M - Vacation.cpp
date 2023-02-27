@@ -18,16 +18,17 @@
 using namespace std;
 void judge();
 int dp[102][102];
-int LCSRecursive(int i, int j, const string &a, const string &b){
+string a, b;
+int LCSRecursive(int i, int j){
     if(i==a.size()|| j==b.size())
         return 0;
     int &ret=dp[i][j];
     if(ret!=-1)return ret;
     ret=0;
     if(a[i]==b[j])
-        return ret=1+ LCSRecursive(i+1, j+1, a, b);
-    ret=max(ret, LCSRecursive(i+1, j, a, b));
-    ret=max(ret, LCSRecursive(i, j+1, a, b));
+        return ret=1+ LCSRecursive(i+1, j+1);
+    ret=max(ret, LCSRecursive(i+1, j));
+    ret=max(ret, LCSRecursive(i, j+1));
     return ret;
 }
 
@@ -35,12 +36,12 @@ int main() {
     judge();
     int cnt=0;
     while(1){
-        string a;cin>>a;
+        getline(cin, a);
         if(a=="#")return 0;
         cnt++;
-        string b;cin>>b;
+        getline(cin, b);
         memset(dp, -1, sizeof(dp));
-        int ans= LCSRecursive(0, 0,a, b);
+        int ans= LCSRecursive(0, 0);
         cout<<"Case #"<<cnt<<": you can visit at most " <<ans<< " cities.";
         cout<<el;
     }
