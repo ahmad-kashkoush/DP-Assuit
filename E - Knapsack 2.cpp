@@ -15,6 +15,8 @@
 #define all(s)  s.begin(), s.end()
 #define cin(v)  for(auto &i:v)cin>>i
 #define cout(v) for(auto i:v)cout<<i<<" "
+#define weight first
+#define value  second
 using namespace std;
 void judge();
 int n,m;
@@ -38,44 +40,57 @@ ll Ans(ll mx){
     for(ll i=mx;i>=0;i--){
         if(KnapsackRecursive(1, i)<=m)
             return i;
-
+// dp[i][value]=minimum weight that we can obtain
     }
     return 0;
 }
 ll Knapsack2Iterative(ll mx){
+/*
+ Base case
+ 1. dp[1][0]=0 dp[i][0]=0;
+ 2. dp[0][anyvalue]=int_max     DP[1]=min(dp[0][j], ---)
+ 3. dp[i][j]=min(dp[i-1][j], weight+dp[i-1][j-value];
+ maximum weight dp[n][value]<=m---> value
+ * */
     int ans=0;
-    for(int i=0;i<=n;i++){
-        auto [weight, value]=v[i];
-        for(int j=0;j<=mx;j++){
-            if(i==0 or j==0)
-                dp[i][j]=0;
-            else if(j-value<0)//can't take this value
-                dp[i][j]=dp[i-1][j];
-            else
-                dp[i][j]=min(dp[i-1][j], weight+dp[i-1][j-value]);
+    for(int i=0;i<=n;i++)
+        dp[i][0] = 0;
+    for(int j=1;j<=mx;j++)
+        dp[0][j]=INT_MAX;
 
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=mx;j++){
+            dp[i][j]=dp[i-1][j];
+            if(j>=v[i].value)
+                dp[i][j]=min(dp[i][j], v[i].weight+dp[i-1][j-v[i].value]);
         }
 
     }
-    return ans;
+    for(int i=mx;i>=0;i--){
+        if(dp[n][i]<=m)
+            return i;
+    }
+
+
 }
 
 
-    int main() {
-        judge();
-        cin>>n>>m;
-        v.resize(n+1);
-        ll Max_value=0;
-        for(int i=1;i<=n;i++) {
-            cin >> v[i].first >> v[i].second;
-            Max_value+=v[i].second;
-        }
-        dp.resize(n+1, vector<ll> (Max_value+1, INT_MAX));
-        // reset dp to -1 for recursive solution
-//        cout<<Ans(Max_value);
-        cout<<Knapsack2Iterative(Max_value);
-        return 0;
+int main() {
+    judge();
+    cin>>n>>m;
+    v.resize(n+1);
+    ll Max_value=0;
+    for(int i=1;i<=n;i++) {
+        cin >> v[i].first >> v[i].second;
+        Max_value+=v[i].second;
     }
+    dp.resize(n+1, vector<ll> (Max_value+10, INT_MAX));
+    // reset dp to -1 for recursive solution
+//        cout<<Ans(Max_value);
+    cout<<Knapsack2Iterative(Max_value);
+    return 0;
+}
 
 
 
