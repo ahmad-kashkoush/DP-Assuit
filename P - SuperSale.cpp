@@ -32,18 +32,31 @@ ll rec(int i, int w){
         return ret=rec(i+1, w);
     return ret=max(rec(i+1, w), v[i].price+rec(i+1, w-v[i].weight));
 }
+ll Iterative(int w){
+    for(int i=0;i<=n;i++){
+        for(int j=0;j<=w;j++){
+            if(j==0||i==0)
+                dp[i][j]=0;
+            else if(v[i].weight>j)
+                dp[i][j]=dp[i-1][j];
+            else
+                dp[i][j]=max(dp[i-1][j],v[i].price+dp[i-1][j-v[i].weight]);
+        }
+    }
+    return dp[n][w];
+}
 
 void solve() {
         cin>>n;
-        v=vector<pair<int, int>>(n);
-        dp=vector<vector<int>> (n, vector<int>(50, -1));
-        for(int i=0;i<n;i++)
+        v=vector<pair<int, int>>(n+1);
+        dp=vector<vector<int>> (n+10, vector<int>(50, -1));
+        for(int i=1;i<=n;i++)
             cin>>v[i].price>>v[i].weight;
         cin>>g;
         ll ans=0;
         for(int i=0;i<g;i++){
             int x; cin>>x;
-            ans+=rec(0, x);
+            ans+=Iterative( x);
         }
         cout<<ans;
 
