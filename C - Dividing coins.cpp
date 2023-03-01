@@ -21,21 +21,30 @@ const double pi = 3.1415926535897932384;
 int dy[] = {1, -1, 0, 0, -1, 1, 1, -1};
 int dx[] = {0, 0, 1, -1, 1, -1, 1, -1};
 vector<int> v;
-int dp[101];
-int n;
-int DividingCoins(int i){
+int dp[101][1010];
+int n, total;
+int DividingCoins(int i, int sum){
     // I need to obtain minimum possible sum From this problem
     if(i==n)
-        return 0;
-    if(dp[i]!=-1)return dp[i];
-    return dp[i]=min(abs(v[i]+ DividingCoins(i+1)), abs(-v[i]+ DividingCoins(i+1)));
+        return abs(2*sum-total);
+    int &ret=dp[i][sum];
+    if(ret!=-1)return ret;
+    ret=0;
+    int leave= DividingCoins(i+1, sum);
+    int take= DividingCoins(i+1, sum+v[i]);
+    return ret=min(take, leave);
 }
 void solve() {
    cin>>n;
     v=vector<int> (n);
     memset(dp, -1, sizeof(dp));
-    cin(v);
-    cout<<DividingCoins(0);
+    total=0;
+    for(int i=0;i<n;i++)
+    {
+        cin>>v[i];
+        total+=v[i];
+    }
+    cout<<DividingCoins(0, 0);
 
 }
 
