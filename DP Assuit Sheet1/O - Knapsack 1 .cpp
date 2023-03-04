@@ -36,6 +36,7 @@ ll KnapsackRecursive(int i, int Rem) {
 }
 ll KnapsackIterative(){
     ll value[n+10][m+10];
+    // value[index][weight]=value
     for(int i=0;i<=n;i++){
         auto [ww, vv]=v[i];
         for(int w=0;w<=m;w++){
