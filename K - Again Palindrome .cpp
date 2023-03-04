@@ -16,30 +16,29 @@
 using namespace std;
 void judge();void tc();
 string s;int n;
-map<pair<int, string>, int> dp;
-map<pair<int, string>, bool> vis;
-bool isPalindrome(const string &j){
-    string tmp;
-    tmp=j;
-//    cout<<j<<el;
-    reverse(all(tmp));
-    return tmp==j;
-}
-int NumberOfPalindromes(int i, string str){
-        if(i==n)
-            return 0;
+vector<vector<ll>> dp;
 
-        if(vis[make_pair(i, str)]==1)return dp[make_pair(i, str)];
-        vis[make_pair(i, str)]=1;
-        int k= isPalindrome(str);
-        return dp[make_pair(i, str)]=k+ NumberOfPalindromes(i+1, str+s[i])+ NumberOfPalindromes(i+1, str);
+ll NumberOfPalindromes(int i, int j){
+//    cout<<s.substr(i, j-i+1)<<el;
+    if(i==j)return 1;
+    if(i+1==j)return 2+(s[i]==s[j]);
+    ll &ans=dp[i][j];
+    if(ans!=-1)return ans;
+    ans=0;
+    if(s[i]==s[j])
+         ans+=1+ NumberOfPalindromes(i+1, j-1);
+    ans+= NumberOfPalindromes(i+1, j);
+    ans+= NumberOfPalindromes(i, j-1);
+    ans-= NumberOfPalindromes(i+1, j-1);
+    return ans;
+
+
 }
 void solve() {
       cin>>s;
       n=s.size();
-      dp.clear();
-      vis.clear();
-      cout<<NumberOfPalindromes(0, "");
+      dp=vector<vector<ll>>(n+10, vector<ll>(n+10,-1 ));
+      cout<<NumberOfPalindromes(0, n-1);
       s.clear();
 
 }
